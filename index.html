@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VibeSpec — Turn Your Vibe Into a Build Spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================
+     DESIGN SYSTEM — Neo-Swiss Brutalism
+     Black grid discipline + acid green punch
+     ============================================ */
+  :root {
+    --bg: #FFFFFF;
+    --surface: #F4F4F0;
+    --border: #000000;
+    --border-light: #CCCCCC;
+    --text-primary: #000000;
+    --text-secondary: #555555;
+    --text-muted: #999999;
+    --accent: #00CC44;
+    --accent-dark: #009933;
+    --accent-light: #E6FFF0;
+    --danger: #FF2200;
+    --warning: #FF9900;
+    --font-heading: 'Space Grotesk', system-ui, sans-serif;
+    --font-body: 'Space Grotesk', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Space Mono', monospace;
+    --grid: 8px;
+    --border-width: 2px;
+    --border-heavy: 4px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    /* Swiss grid background */
+    background-image:
+      linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* ============================================
+     LAYOUT
+     ============================================ */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ============================================
+     HEADER
+     ============================================ */
+  header {
+    background: var(--bg);
+    border-bottom: var(--border-heavy) solid var(--border);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-badge {
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 10px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    padding: 2px 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .header-tag {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ============================================
+     HERO
+     ============================================ */
+  .hero {
+    padding: 80px 24px 60px;
+    max-width: 960px;
+    margin: 0 auto;
+    border-bottom: var(--border-width) solid var(--border);
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(48px, 8vw, 88px);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  .hero-title .accent-word {
+    color: var(--accent);
+    -webkit-text-stroke: 0px;
+  }
+
+  .hero-title .outline-word {
+    -webkit-text-stroke: 3px var(--border);
+    color: transparent;
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+    color: var(--text-secondary);
+    max-width: 560px;
+    line-height: 1.5;
+    margin-bottom: 32px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .meta-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+  }
+
+  .meta-value {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* ============================================
+     MAIN INPUT SECTION
+     ============================================ */
+  .input-section {
+    padding: 60px 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .section-number {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--border);
+    color: var(--bg);
+    padding: 2px 8px;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .vibe-input-wrapper {
+    position: relative;
+    border: var(--border-heavy) solid var(--border);
+    background: var(--bg);
+    transition: border-color 0.15s;
+  }
+
+  .vibe-input-wrapper:focus-within {
+    border-color: var(--accent);
+    outline: 4px solid var(--accent-light);
+  }
+
+  .vibe-input {
+    width: 100%;
+    min-height: 180px;
+    padding: 20px;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    border: none;
+    outline: none;
+    resize: vertical;
+    background: transparent;
+    color: var(--text-primary);
+  }
+
+  .vibe-input::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .input-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-top: var(--border-width) solid var(--border);
+    background: var(--surface);
+  }
+
+  .char-count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .char-count.warn { color: var(--warning); }
+  .char-count.limit { color: var(--danger); }
+
+  /* VIBE EXAMPLES */
+  .vibe-examples {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .examples-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+  }
+
+  .example-chip {
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 4px 12px;
+    border: var(--border-width) solid var(--border-light);
+    background: var(--bg);
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.1s;
+    white-space: nowrap;
+  }
+
+  .example-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent-dark);
+    background: var(--accent-light);
+  }
+
+  /* CTA BUTTON */
+  .cta-row {
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 700;
+    padding: 14px 32px;
+    background: var(--border);
+    color: var(--bg);
+    border: var(--border-heavy) solid var(--border);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--border);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--border);
+  }
+
+  .btn-primary:active {
+    transform: translate(0, 0);
+    box-shadow: none;
+  }
+
+  .btn-primary:disabled {
+    background: var(--border-light);
+    border-color: var(--border-light);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-secondary {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 24px;
+    background: var(--bg);
+    color: var(--text-primary);
+    border: var(--border-width) solid var(--border);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.15s;
+  }
+
+  .btn-secondary:hover {
+    background: var(--surface);
+    transform: translate(-1px, -1px);
+    box-shadow: 2px 2px 0 var(--border);
+  }
+
+  .btn-secondary:active {
+    transform: translate(0, 0);
+    box-shadow: none;
+  }
+
+  .btn-icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  /* ============================================
+     PROCESSING ANIMATION
+     ============================================ */
+  .processing {
+    display: none;
+    padding: 40px 24px;
+    max-width: 960px;
+    margin: 0 auto;
+    border-top: var(--border-width) solid var(--border);
+  }
+
+  .processing.active {
+    display: block;
+  }
+
+  .processing-label {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent-dark);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .processing-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 0.8s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.6); }
+  }
+
+  .processing-bar-outer {
+    width: 100%;
+    height: 24px;
+    border: var(--border-width) solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .processing-bar-inner {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.3s ease;
+    position: relative;
+  }
+
+  .processing-bar-inner::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+  }
+
+  .processing-steps {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .processing-step {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+
+  .processing-step.done { color: var(--accent-dark); }
+  .processing-step.active { color: var(--text-primary); }
+
+  .step-icon { font-size: 14px; }
+
+  /* ============================================
+     OUTPUT / SPEC SECTION
+     ============================================ */
+  #output-section {
+    display: none;
+    max-width: 960px;
+    margin: 0 auto;
+    border-top: var(--border-heavy) solid var(--border);
+    animation: fadeSlideIn 0.4s ease;
+  }
+
+  #output-section.active {
+    display: block;
+  }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SPEC HEADER */
+  .spec-header {
+    padding: 40px 24px 32px;
+    border-bottom: var(--border-width) solid var(--border);
+    background: var(--accent);
+  }
+
+  .spec-header-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+    margin-bottom: 12px;
+  }
+
+  .spec-app-name {
+    font-family: var(--font-heading);
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .spec-tagline {
+    font-size: 16px;
+    color: var(--accent-dark);
+    font-weight: 500;
+    max-width: 500px;
+  }
+
+  /* VIBE METER */
+  .vibe-meter-section {
+    padding: 32px 24px;
+    border-bottom: var(--border-width) solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 600px) {
+    .vibe-meter-section { grid-template-columns: 1fr; }
+  }
+
+  .meter-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .meter-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .meter-value {
+    font-family: var(--font-heading);
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  .meter-bar {
+    height: 8px;
+    background: var(--border-light);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .meter-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 1s ease;
+  }
+
+  .meter-fill.medium { background: var(--warning); }
+  .meter-fill.hard { background: var(--danger); }
+
+  .meter-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* SPEC BODY - GRID */
+  .spec-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: var(--border-width) solid var(--border);
+  }
+
+  @media (max-width: 700px) {
+    .spec-body { grid-template-columns: 1fr; }
+  }
+
+  .spec-panel {
+    padding: 32px 24px;
+    border-bottom: var(--border-width) solid var(--border);
+  }
+
+  .spec-panel:nth-child(odd) {
+    border-right: var(--border-width) solid var(--border);
+  }
+
+  @media (max-width: 700px) {
+    .spec-panel:nth-child(odd) { border-right: none; }
+  }
+
+  .panel-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: var(--border-width) solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .panel-count {
+    background: var(--accent);
+    color: var(--border);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  /* REQUIREMENTS */
+  .req-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .req-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .req-priority {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .req-priority.must { background: var(--border); color: var(--bg); }
+  .req-priority.should { background: var(--surface); color: var(--text-secondary); border: 1px solid var(--border-light); }
+  .req-priority.nice { background: var(--accent-light); color: var(--accent-dark); border: 1px solid var(--accent); }
+
+  /* TECH STACK */
+  .tech-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tech-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+  }
+
+  .tech-name {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .tech-role {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* USER STORIES */
+  .stories-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .story-item {
+    padding: 12px;
+    border: var(--border-width) solid var(--border-light);
+    background: var(--bg);
+    transition: border-color 0.15s;
+  }
+
+  .story-item:hover {
+    border-color: var(--accent);
+  }
+
+  .story-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .story-body {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .story-body strong { font-style: normal; color: var(--text-primary); font-weight: 600; }
+
+  /* RISKS & EDGE CASES */
+  .risk-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .risk-item {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-left: 3px solid var(--warning);
+    background: #FFFBF0;
+    line-height: 1.4;
+  }
+
+  .risk-icon { flex-shrink: 0; }
+
+  /* AI PROMPT SECTION */
+  .prompt-section {
+    grid-column: 1 / -1;
+    padding: 32px 24px;
+    border-top: var(--border-heavy) solid var(--border);
+    background: var(--surface);
+  }
+
+  .prompt-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .prompt-title .tool-badges {
+    display: flex;
+    gap: 6px;
+  }
+
+  .tool-badge {
+    font-size: 9px;
+    padding: 2px 6px;
+    border: 1px solid var(--border-light);
+    color: var(--text-secondary);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .prompt-box {
+    background: var(--border);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.7;
+    padding: 24px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    border: 3px solid var(--border);
+    position: relative;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .prompt-box::-webkit-scrollbar { width: 6px; }
+  .prompt-box::-webkit-scrollbar-track { background: var(--border); }
+  .prompt-box::-webkit-scrollbar-thumb { background: var(--accent); }
+
+  .prompt-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* SPEC ACTIONS */
+  .spec-actions {
+    padding: 32px 24px;
+    border-top: var(--border-heavy) solid var(--border);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    background: var(--bg);
+  }
+
+  .spec-actions-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-right: 8px;
+  }
+
+  /* COPY FEEDBACK */
+  .copy-feedback {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent-dark);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .copy-feedback.show { opacity: 1; }
+
+  /* ============================================
+     FOOTER
+     ============================================ */
+  footer {
+    border-top: var(--border-heavy) solid var(--border);
+    padding: 24px;
+    max-width: 960px;
+    margin: 60px auto 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-brand {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .footer-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: right;
+  }
+
+  /* ============================================
+     ERROR STATE
+     ============================================ */
+  .error-banner {
+    display: none;
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #FFF0EE;
+    border: var(--border-width) solid var(--danger);
+    color: var(--danger);
+    font-size: 13px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .error-banner.show { display: flex; gap: 8px; align-items: center; }
+
+  /* ============================================
+     EMPTY STATE (initial)
+     ============================================ */
+  .how-it-works {
+    padding: 60px 24px;
+    border-top: var(--border-width) solid var(--border-light);
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 32px;
+    border: var(--border-width) solid var(--border);
+  }
+
+  @media (max-width: 600px) {
+    .steps-grid { grid-template-columns: 1fr; }
+  }
+
+  .step-card {
+    padding: 28px 24px;
+    border-right: var(--border-width) solid var(--border);
+    position: relative;
+  }
+
+  .step-card:last-child { border-right: none; }
+
+  .step-number {
+    font-family: var(--font-heading);
+    font-size: 64px;
+    font-weight: 700;
+    letter-spacing: -3px;
+    color: var(--surface);
+    -webkit-text-stroke: 2px var(--border-light);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .step-heading {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ============================================
+     MOBILE TWEAKS
+     ============================================ */
+  @media (max-width: 480px) {
+    .hero { padding: 48px 16px 40px; }
+    .hero-title { letter-spacing: -2px; }
+    .input-section { padding: 40px 16px; }
+    .spec-panel { padding: 24px 16px; }
+    .prompt-section { padding: 24px 16px; }
+    .spec-actions { padding: 24px 16px; }
+    .btn-primary { width: 100%; justify-content: center; }
+    footer { padding: 24px 16px; }
+  }
+
+  /* ============================================
+     ANIMATIONS
+     ============================================ */
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-in { animation: slideDown 0.3s ease forwards; }
+
+  /* SAVED BADGE */
+  .saved-list {
+    padding: 0 24px 40px;
+    max-width: 960px;
+    margin: 0 auto;
+    display: none;
+  }
+
+  .saved-list.has-items { display: block; }
+
+  .saved-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border: var(--border-width) solid var(--border-light);
+    background: var(--bg);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .saved-item:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  .saved-item-name {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .saved-item-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    gap: 12px;
+  }
+
+  .delete-saved {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--text-muted);
+    padding: 2px 6px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .saved-item:hover .delete-saved { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      VIBESPEC
+      <span class="logo-badge">BETA</span>
+    </div>
+    <div class="header-tag">Vibe → Spec → Ship</div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Trending Feb 2026 · Vibe Coding Era</div>
+  <h1 class="hero-title">
+    TURN YOUR<br>
+    <span class="accent-word">VIBE</span> INTO A<br>
+    <span class="outline-word">BUILD SPEC</span>
+  </h1>
+  <p class="hero-subtitle">
+    You describe it casual. We translate it into a proper technical spec with
+    requirements, user stories, tech stack, complexity score, and a copy-paste
+    AI build prompt. Stop vibing. Start shipping.
+  </p>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <span class="meta-label">Format</span>
+      <span class="meta-value">Structured Spec</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Output</span>
+      <span class="meta-value">Cursor / Claude Ready</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Time</span>
+      <span class="meta-value">&lt; 3 seconds</span>
+    </div>
+  </div>
+</div>
+
+<!-- INPUT SECTION -->
+<div class="input-section">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2 class="section-title">Describe Your App (in whatever language you want)</h2>
+  </div>
+
+  <div class="vibe-input-wrapper">
+    <textarea
+      id="vibe-input"
+      class="vibe-input"
+      placeholder="like i wanna build this thing where you type in a song and it tells you the vibe/mood and suggests other songs that match that energy?? kinda like spotify's discovery but just for vibes. should look really cool and be fast"
+      maxlength="2000"
+    ></textarea>
+    <div class="input-footer">
+      <span class="char-count" id="char-count">0 / 2000 chars</span>
+      <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);">Use casual language — be specific about features you want</span>
+    </div>
+  </div>
+
+  <div class="vibe-examples">
+    <span class="examples-label">Try:</span>
+    <button class="example-chip" onclick="loadExample(0)">💧 Water tracker with streaks</button>
+    <button class="example-chip" onclick="loadExample(1)">🎵 Song vibe matcher</button>
+    <button class="example-chip" onclick="loadExample(2)">🤖 AI flashcard maker</button>
+    <button class="example-chip" onclick="loadExample(3)">🗺️ Travel budget splitter</button>
+    <button class="example-chip" onclick="loadExample(4)">📊 Daily standup summarizer</button>
+  </div>
+
+  <div class="error-banner" id="error-banner">
+    <span>⚠</span>
+    <span id="error-text">Please describe your app idea first.</span>
+  </div>
+
+  <div class="cta-row">
+    <button class="btn-primary" id="generate-btn" onclick="generateSpec()">
+      <span class="btn-icon">⚡</span>
+      Generate Spec
+    </button>
+    <button class="btn-secondary" onclick="clearAll()">Clear</button>
+    <span class="copy-feedback" id="generate-feedback">✓ Spec generated!</span>
+  </div>
+</div>
+
+<!-- PROCESSING -->
+<div class="processing" id="processing">
+  <div class="processing-label">
+    <div class="processing-dot"></div>
+    Translating vibe...
+  </div>
+  <div class="processing-bar-outer">
+    <div class="processing-bar-inner" id="progress-bar"></div>
+  </div>
+  <div class="processing-steps" id="processing-steps">
+    <div class="processing-step" id="step-1"><span class="step-icon">○</span> Parsing intent & features</div>
+    <div class="processing-step" id="step-2"><span class="step-icon">○</span> Mapping tech stack</div>
+    <div class="processing-step" id="step-3"><span class="step-icon">○</span> Writing user stories</div>
+    <div class="processing-step" id="step-4"><span class="step-icon">○</span> Scoring complexity</div>
+    <div class="processing-step" id="step-5"><span class="step-icon">○</span> Generating AI build prompt</div>
+  </div>
+</div>
+
+<!-- OUTPUT -->
+<div id="output-section">
+
+  <!-- SPEC HEADER (green) -->
+  <div class="spec-header">
+    <div class="spec-header-eyebrow">Generated Spec · <span id="spec-timestamp"></span></div>
+    <div class="spec-app-name" id="spec-app-name">App Name</div>
+    <div class="spec-tagline" id="spec-tagline">Tagline</div>
+  </div>
+
+  <!-- VIBE METER -->
+  <div class="vibe-meter-section">
+    <div class="meter-block">
+      <div class="meter-label">Complexity Score</div>
+      <div class="meter-value" id="meter-complexity">—</div>
+      <div class="meter-bar"><div class="meter-fill" id="meter-complexity-bar" style="width:0%"></div></div>
+      <div class="meter-sub" id="meter-complexity-label">—</div>
+    </div>
+    <div class="meter-block">
+      <div class="meter-label">Features Detected</div>
+      <div class="meter-value" id="meter-features">—</div>
+      <div class="meter-bar"><div class="meter-fill" id="meter-features-bar" style="width:0%"></div></div>
+      <div class="meter-sub" id="meter-features-label">—</div>
+    </div>
+    <div class="meter-block">
+      <div class="meter-label">Est. Build Time</div>
+      <div class="meter-value" id="meter-time">—</div>
+      <div class="meter-bar"><div class="meter-fill" id="meter-time-bar" style="width:0%"></div></div>
+      <div class="meter-sub" id="meter-time-label">—</div>
+    </div>
+  </div>
+
+  <!-- SPEC GRID -->
+  <div class="spec-body">
+
+    <!-- REQUIREMENTS -->
+    <div class="spec-panel">
+      <div class="panel-title">
+        Requirements
+        <span class="panel-count" id="req-count">0</span>
+      </div>
+      <ul class="req-list" id="req-list"></ul>
+    </div>
+
+    <!-- TECH STACK -->
+    <div class="spec-panel">
+      <div class="panel-title">
+        Tech Stack
+        <span class="panel-count" id="tech-count">0</span>
+      </div>
+      <div class="tech-grid" id="tech-grid"></div>
+    </div>
+
+    <!-- USER STORIES -->
+    <div class="spec-panel">
+      <div class="panel-title">
+        User Stories
+        <span class="panel-count" id="stories-count">0</span>
+      </div>
+      <div class="stories-list" id="stories-list"></div>
+    </div>
+
+    <!-- RISKS & EDGE CASES -->
+    <div class="spec-panel">
+      <div class="panel-title">
+        Risks &amp; Edge Cases
+        <span class="panel-count" id="risks-count">0</span>
+      </div>
+      <ul class="risk-list" id="risks-list"></ul>
+    </div>
+
+    <!-- AI PROMPT (full width) -->
+    <div class="spec-panel prompt-section">
+      <div class="prompt-title">
+        AI Build Prompt
+        <div class="tool-badges">
+          <span class="tool-badge">CURSOR</span>
+          <span class="tool-badge">CLAUDE</span>
+          <span class="tool-badge">COPILOT</span>
+        </div>
+      </div>
+      <div class="prompt-box" id="prompt-box"></div>
+      <div class="prompt-actions">
+        <button class="btn-primary" onclick="copyPrompt()">
+          <span class="btn-icon">📋</span>
+          Copy Prompt
+        </button>
+        <button class="btn-secondary" onclick="downloadSpec()">
+          ↓ Download .md
+        </button>
+        <span class="copy-feedback" id="prompt-feedback">✓ Copied to clipboard!</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SPEC ACTIONS -->
+  <div class="spec-actions">
+    <span class="spec-actions-label">Actions:</span>
+    <button class="btn-primary" onclick="saveSpec()">
+      <span class="btn-icon">💾</span>
+      Save Spec
+    </button>
+    <button class="btn-secondary" onclick="copyFullSpec()">
+      Copy Full Spec
+    </button>
+    <button class="btn-secondary" onclick="startOver()">
+      ↺ New Spec
+    </button>
+    <span class="copy-feedback" id="full-copy-feedback">✓ Spec copied!</span>
+  </div>
+
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-it-works" id="how-it-works">
+  <div class="section-header">
+    <span class="section-number">—</span>
+    <h2 class="section-title">How It Works</h2>
+  </div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-number">01</div>
+      <div class="step-heading">Describe Your Vibe</div>
+      <div class="step-desc">Write in plain English. Be as casual or detailed as you want. Mention features, feelings, similar apps, whatever's in your head.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-number">02</div>
+      <div class="step-heading">Get Your Spec</div>
+      <div class="step-desc">VibeSpec detects features, maps a tech stack, writes user stories, scores complexity, and flags risks. All in under 3 seconds.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-number">03</div>
+      <div class="step-heading">Ship With AI</div>
+      <div class="step-desc">Copy the generated build prompt into Cursor, Claude, or Copilot. Start coding with a real spec instead of just vibing.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SAVED SPECS -->
+<div class="saved-list" id="saved-list">
+  <div class="section-header" style="padding: 0 0 16px;">
+    <span class="section-number">↻</span>
+    <h2 class="section-title">Saved Specs</h2>
+  </div>
+  <div id="saved-items"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">VIBESPEC</div>
+  <div class="footer-meta">
+    Neo-Swiss Brutalism · 2026<br>
+    Describe it. Spec it. Ship it.
+  </div>
+</footer>
+
+<script>
+/* ============================================
+   EXAMPLE VIBES
+   ============================================ */
+const EXAMPLES = [
+  "i want to build a water tracking app where you tap a button to log glasses of water. should have a daily goal, show streaks, look kinda cute with animations. mobile-first. no login needed but saves your data somehow",
+  "like i wanna build this thing where you type in a song and it tells you the vibe/mood and suggests other songs that match that energy?? kinda like spotify's discovery but just for vibes. should look really cool and be fast. maybe use spotify api or just do it with tags",
+  "ai flashcard app where you paste any text (article, notes, whatever) and it auto-generates flashcards. you can then do a quiz mode where it flips through them. save decks, basic spaced repetition would be nice. clean ui",
+  "travel budget splitter for groups. enter trip, add people, log expenses, mark who paid, see who owes who at the end. should work offline, no signup. export to csv maybe. minimal design",
+  "daily standup summarizer - you paste your git commits or jira tickets from yesterday, it reformats them into the classic standup format (what i did, what im doing today, blockers). copy to slack with one click"
+];
+
+function loadExample(idx) {
+  const el = document.getElementById('vibe-input');
+  el.value = EXAMPLES[idx];
+  updateCharCount();
+  el.focus();
+}
+
+/* ============================================
+   CHAR COUNT
+   ============================================ */
+document.getElementById('vibe-input').addEventListener('input', updateCharCount);
+
+function updateCharCount() {
+  const val = document.getElementById('vibe-input').value;
+  const el = document.getElementById('char-count');
+  el.textContent = `${val.length} / 2000 chars`;
+  el.className = 'char-count' + (val.length > 1800 ? ' limit' : val.length > 1500 ? ' warn' : '');
+}
+
+/* ============================================
+   FEATURE DETECTION RULES
+   ============================================ */
+const FEATURE_RULES = [
+  { keywords: ['login','signup','sign up','auth','user account','profile','register'], feature: 'User Authentication', risk: 'Auth adds significant complexity — consider auth-free MVP first', tech: [{ name: 'NextAuth / Supabase', role: 'Authentication' }] },
+  { keywords: ['database','db','store','save','persist','storage','history'], feature: 'Data Persistence', risk: 'Storage strategy affects all other features — decide early', tech: [{ name: 'SQLite / Supabase', role: 'Database' }] },
+  { keywords: ['api','spotify','openai','gpt','ai','claude','gemini','llm'], feature: 'External API Integration', risk: 'API rate limits & costs — add caching layer and error handling', tech: [{ name: 'API Layer + Caching', role: 'Integrations' }] },
+  { keywords: ['mobile','phone','ios','android','app store'], feature: 'Mobile Experience', risk: 'App store approval adds weeks — start with PWA', tech: [{ name: 'React Native / PWA', role: 'Mobile' }] },
+  { keywords: ['real-time','live','realtime','websocket','socket','push'], feature: 'Real-Time Updates', risk: 'WebSockets increase infrastructure complexity significantly', tech: [{ name: 'WebSockets / SSE', role: 'Real-time' }] },
+  { keywords: ['notification','remind','alert','email','push notification'], feature: 'Notifications', risk: 'Email deliverability is harder than it looks — use a service', tech: [{ name: 'Resend / Expo Push', role: 'Notifications' }] },
+  { keywords: ['share','social','post','tweet','instagram','export'], feature: 'Social Sharing / Export', risk: 'OG images & share previews require extra server work', tech: [{ name: 'OG Image Generation', role: 'Social' }] },
+  { keywords: ['search','filter','sort','browse','find'], feature: 'Search & Filtering', risk: 'Full-text search can be slow at scale — index early', tech: [{ name: 'Algolia / Postgres FTS', role: 'Search' }] },
+  { keywords: ['payment','subscribe','pay','billing','stripe','premium'], feature: 'Payments / Subscription', risk: 'Payment flows require compliance + extensive error handling', tech: [{ name: 'Stripe', role: 'Payments' }] },
+  { keywords: ['offline','no internet','pwa','cache'], feature: 'Offline Support', risk: 'Service workers are tricky — test heavily on mobile', tech: [{ name: 'Service Worker / IndexedDB', role: 'Offline' }] },
+  { keywords: ['animation','animated','animate','transition','smooth'], feature: 'Rich Animations', risk: 'Animations can hurt performance on low-end devices — test on older phones', tech: [{ name: 'Framer Motion / GSAP', role: 'Animation' }] },
+  { keywords: ['chart','graph','visualization','data viz','analytics'], feature: 'Data Visualization', risk: 'Charts with large datasets can be slow — consider virtualization', tech: [{ name: 'Chart.js / D3.js', role: 'Visualization' }] },
+  { keywords: ['streak','gamif','points','badge','achievement','leaderboard'], feature: 'Gamification', risk: 'Streak logic has many edge cases (timezone, missed days, retroactive data)', tech: [] },
+  { keywords: ['drag','drop','kanban','board','drag and drop'], feature: 'Drag & Drop UI', risk: 'Touch drag-and-drop on mobile needs special handling', tech: [{ name: 'dnd-kit / SortableJS', role: 'Drag & Drop' }] },
+  { keywords: ['upload','image','photo','file','media'], feature: 'File Upload', risk: 'File size limits, type validation, and CDN costs need planning', tech: [{ name: 'Cloudflare R2 / S3', role: 'File Storage' }] },
+  { keywords: ['markdown','rich text','editor','wysiwyg'], feature: 'Rich Text Editing', risk: 'WYSIWYG editors have many quirks — use proven libraries only', tech: [{ name: 'TipTap / ProseMirror', role: 'Editor' }] },
+  { keywords: ['quiz','flashcard','learn','study','spaced repetition'], feature: 'Learning / Quiz Mode', risk: 'Spaced repetition algorithms need careful testing for correctness', tech: [] },
+  { keywords: ['group','team','collab','multiple users','shared'], feature: 'Multi-User / Collaboration', risk: 'Collaborative features require conflict resolution strategy', tech: [{ name: 'Yjs / Liveblocks', role: 'Collaboration' }] },
+  { keywords: ['csv','export','download','pdf'], feature: 'Data Export', risk: 'CSV encoding issues with special characters — test edge cases', tech: [] },
+  { keywords: ['map','location','geo','gps','nearby'], feature: 'Maps & Geolocation', risk: 'Location permissions UX is tricky — always show why before asking', tech: [{ name: 'Mapbox / Leaflet', role: 'Maps' }] },
+];
+
+/* ============================================
+   TECH STACK DEFAULTS
+   ============================================ */
+const BASE_STACK = [
+  { name: 'React / Next.js', role: 'Frontend Framework' },
+  { name: 'TypeScript', role: 'Type Safety' },
+  { name: 'Tailwind CSS', role: 'Styling' },
+  { name: 'Vercel / Netlify', role: 'Deployment' },
+];
+
+/* ============================================
+   SPEC GENERATION ENGINE
+   ============================================ */
+function generateSpec() {
+  const input = document.getElementById('vibe-input').value.trim();
+
+  // Validate
+  if (input.length < 20) {
+    showError('Please describe your app idea in at least a few sentences. More detail = better spec!');
+    return;
+  }
+
+  clearError();
+  hideOutput();
+  showProcessing();
+
+  // Disable button
+  const btn = document.getElementById('generate-btn');
+  btn.disabled = true;
+
+  // Run with animated steps
+  runProcessing(input, () => {
+    btn.disabled = false;
+  });
+}
+
+function runProcessing(input, done) {
+  const steps = ['step-1', 'step-2', 'step-3', 'step-4', 'step-5'];
+  const durations = [400, 300, 350, 250, 300];
+  const icons = ['●', '●', '●', '●', '●'];
+  let progress = 0;
+  let currentStep = 0;
+
+  const stepIcons = { done: '✓', active: '◌', idle: '○' };
+
+  function advanceStep() {
+    if (currentStep < steps.length) {
+      // Mark previous as done
+      if (currentStep > 0) {
+        const prev = document.getElementById(steps[currentStep - 1]);
+        if (prev) {
+          prev.className = 'processing-step done';
+          prev.querySelector('.step-icon').textContent = '✓';
+        }
+      }
+      // Activate current
+      const cur = document.getElementById(steps[currentStep]);
+      if (cur) {
+        cur.className = 'processing-step active';
+        cur.querySelector('.step-icon').textContent = '◌';
+      }
+      progress = Math.round(((currentStep + 1) / steps.length) * 90);
+      document.getElementById('progress-bar').style.width = progress + '%';
+      currentStep++;
+      setTimeout(advanceStep, durations[currentStep - 1] || 300);
+    } else {
+      // All done — complete
+      const last = document.getElementById(steps[steps.length - 1]);
+      if (last) {
+        last.className = 'processing-step done';
+        last.querySelector('.step-icon').textContent = '✓';
+      }
+      document.getElementById('progress-bar').style.width = '100%';
+
+      setTimeout(() => {
+        const spec = buildSpec(input);
+        hideProcessing();
+        renderSpec(spec);
+        done();
+      }, 300);
+    }
+  }
+
+  advanceStep();
+}
+
+function buildSpec(input) {
+  const lower = input.toLowerCase();
+
+  // Detect features
+  const detected = [];
+  const detectedTech = [];
+  const detectedRisks = [];
+
+  FEATURE_RULES.forEach(rule => {
+    const matched = rule.keywords.some(kw => lower.includes(kw));
+    if (matched) {
+      detected.push(rule.feature);
+      if (rule.risk) detectedRisks.push(rule.risk);
+      if (rule.tech) detectedTech.push(...rule.tech);
+    }
+  });
+
+  // Always have at least some features
+  const coreFeatures = detected.length ? detected : ['Core UI', 'Data Display', 'User Input'];
+
+  // Build requirements
+  const requirements = buildRequirements(lower, coreFeatures, detected);
+
+  // Build tech stack
+  const techStack = buildTechStack(detectedTech, detected, lower);
+
+  // Build user stories
+  const stories = buildUserStories(lower, coreFeatures, requirements);
+
+  // Build risks (deduplicated)
+  const risks = [...new Set(detectedRisks)];
+  risks.push('Mobile responsiveness — test on 375px viewport');
+  risks.push('Empty & error states — handle all edge cases');
+  if (detected.includes('External API Integration')) {
+    // already covered
+  } else {
+    risks.push('Performance — keep initial load under 2 seconds');
+  }
+
+  // Score complexity
+  const featureCount = coreFeatures.length;
+  const complexScore = Math.min(10, Math.max(1, Math.round(
+    featureCount * 1.2 +
+    (detected.includes('User Authentication') ? 2 : 0) +
+    (detected.includes('Real-Time Updates') ? 1.5 : 0) +
+    (detected.includes('Payments / Subscription') ? 2 : 0) +
+    (detected.includes('Multi-User / Collaboration') ? 2 : 0) +
+    (lower.length > 500 ? 1 : 0)
+  )));
+
+  const complexLabel = complexScore <= 3 ? 'Weekend project' : complexScore <= 6 ? 'Two-week sprint' : complexScore <= 8 ? 'Full month build' : 'Multi-month MVP';
+  const buildTime = complexScore <= 3 ? '1–2 days' : complexScore <= 6 ? '1–2 weeks' : complexScore <= 8 ? '3–4 weeks' : '2–3 months';
+
+  // Generate app name
+  const appName = deriveAppName(lower, coreFeatures);
+  const tagline = deriveTagline(lower, coreFeatures);
+
+  // Generate AI prompt
+  const prompt = generateAIPrompt(input, appName, requirements, techStack, coreFeatures, stories);
+
+  return {
+    appName,
+    tagline,
+    requirements,
+    techStack,
+    stories,
+    risks: risks.slice(0, 6),
+    complexScore,
+    complexLabel,
+    featureCount: coreFeatures.length,
+    buildTime,
+    prompt,
+    timestamp: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })
+  };
+}
+
+function buildRequirements(lower, features, detected) {
+  const musts = [];
+  const shoulds = [];
+  const nices = [];
+
+  // Core always
+  musts.push('App renders correctly on mobile (375px) and desktop');
+  musts.push('No broken states — all interactive elements respond to user action');
+
+  // Feature-driven
+  if (detected.includes('User Authentication')) {
+    musts.push('User can sign up and log in securely');
+    musts.push('Session persists across page refreshes');
+  } else if (lower.includes('save') || lower.includes('store') || lower.includes('persist')) {
+    musts.push('User data persists between sessions (localStorage or DB)');
+  }
+
+  if (detected.includes('External API Integration')) {
+    musts.push('API calls are handled with loading and error states');
+    musts.push('API keys are never exposed in frontend code');
+  }
+
+  if (detected.includes('Search & Filtering')) {
+    musts.push('Search returns results within 300ms for typical datasets');
+  }
+
+  if (detected.includes('Notifications')) {
+    shoulds.push('User receives notifications at appropriate times');
+    shoulds.push('User can control notification preferences');
+  }
+
+  if (detected.includes('Data Persistence')) {
+    musts.push('Data is saved reliably and survives page reload');
+    shoulds.push('User can export or back up their data');
+  }
+
+  if (detected.includes('Rich Animations')) {
+    shoulds.push('Animations run at 60fps and do not block UI');
+    nices.push('Reduced motion preference is respected (prefers-reduced-motion)');
+  }
+
+  if (detected.includes('File Upload')) {
+    musts.push('File uploads validate type and size before sending');
+  }
+
+  if (detected.includes('Gamification')) {
+    musts.push('Streak logic handles edge cases (timezone, retroactive, missed days)');
+  }
+
+  if (detected.includes('Data Visualization')) {
+    shoulds.push('Charts are accessible with proper aria labels');
+  }
+
+  // Always
+  shoulds.push('Empty state displays helpful onboarding, not a blank screen');
+  shoulds.push('Error messages are human-readable (not "Error: 500")');
+  shoulds.push('All form inputs have validation with inline feedback');
+  nices.push('Dark mode support');
+  nices.push('Keyboard navigation for all interactive elements');
+  nices.push('WCAG AA contrast ratios on all text');
+
+  const reqs = [];
+  musts.slice(0, 4).forEach(r => reqs.push({ text: r, priority: 'must' }));
+  shoulds.slice(0, 3).forEach(r => reqs.push({ text: r, priority: 'should' }));
+  nices.slice(0, 2).forEach(r => reqs.push({ text: r, priority: 'nice' }));
+  return reqs;
+}
+
+function buildTechStack(detectedTech, detected, lower) {
+  const stack = [...BASE_STACK];
+
+  // Add detected
+  detectedTech.forEach(tech => {
+    if (!stack.find(s => s.name === tech.name)) {
+      stack.push(tech);
+    }
+  });
+
+  // Always need a DB strategy if persistence mentioned
+  if (detected.includes('Data Persistence') && !stack.find(s => s.role === 'Database')) {
+    stack.splice(2, 0, { name: 'localStorage / IndexedDB', role: 'Client Storage' });
+  }
+
+  // Cap at 7
+  return stack.slice(0, 7);
+}
+
+function buildUserStories(lower, features, requirements) {
+  const stories = [];
+
+  // Always-there stories
+  stories.push({
+    title: 'First-time user onboarding',
+    body: 'As a <strong>new user</strong>, I want to understand what this app does immediately, so that I can <strong>decide if it\'s useful for me</strong> within 10 seconds.'
+  });
+
+  if (lower.includes('save') || lower.includes('history') || lower.includes('track')) {
+    stories.push({
+      title: 'Save and retrieve data',
+      body: 'As a <strong>returning user</strong>, I want my data to be exactly where I left it, so that I <strong>don\'t have to re-enter anything</strong>.'
+    });
+  }
+
+  if (lower.includes('share') || lower.includes('export') || lower.includes('copy')) {
+    stories.push({
+      title: 'Share results',
+      body: 'As a <strong>user with results</strong>, I want to share or export my output with one click, so that I <strong>can show others without leaving the app</strong>.'
+    });
+  }
+
+  if (lower.includes('search') || lower.includes('find') || lower.includes('filter')) {
+    stories.push({
+      title: 'Search and filter',
+      body: 'As a <strong>power user</strong>, I want to filter and search my content quickly, so that I <strong>can find what I need without scrolling endlessly</strong>.'
+    });
+  }
+
+  if (lower.includes('mobile') || lower.includes('phone')) {
+    stories.push({
+      title: 'Mobile usage',
+      body: 'As a <strong>mobile user</strong>, I want the app to be fully usable with one hand on a phone screen, so that I <strong>can use it anywhere, anytime</strong>.'
+    });
+  }
+
+  // Generic feature stories
+  features.slice(0, 2).forEach(feat => {
+    if (!stories.find(s => s.title.toLowerCase().includes(feat.toLowerCase().split(' ')[0]))) {
+      stories.push({
+        title: feat,
+        body: `As a <strong>user</strong>, I want to use ${feat.toLowerCase()}, so that I can <strong>accomplish my goal more efficiently</strong>.`
+      });
+    }
+  });
+
+  // Error story always
+  stories.push({
+    title: 'Handle errors gracefully',
+    body: 'As a <strong>user who encounters an error</strong>, I want to see a clear message and a way to recover, so that I <strong>don\'t get stuck or lose my work</strong>.'
+  });
+
+  return stories.slice(0, 5);
+}
+
+function deriveAppName(lower, features) {
+  const words = lower.split(/\s+/).filter(w => w.length > 4 && !['where','which','would','should','could','about','their','there','these','those','thing','things','really','something','somehow','people','maybe'].includes(w));
+
+  // Some creative name patterns
+  const patterns = [
+    () => capitalize(words[0] || 'App') + capitalize(words[1] || 'Kit'),
+    () => capitalize(words[0] || 'App') + 'Lab',
+    () => capitalize(words[0] || 'App') + 'Flow',
+    () => capitalize(words[0] || 'App') + 'Hub',
+  ];
+
+  const idx = Math.floor(Math.random() * patterns.length);
+  let name = patterns[idx]();
+
+  // Clean up
+  name = name.replace(/[^a-zA-Z]/g, '');
+  if (name.length > 12) name = name.slice(0, 10);
+
+  return name || 'AppKit';
+}
+
+function deriveTagline(lower, features) {
+  const taglines = [
+    `${features[0] || 'Your app'} — faster, cleaner, without the fuss.`,
+    `The simple way to ${features[0] ? features[0].toLowerCase() : 'get things done'}.`,
+    `${features[0] || 'Build it'}. Track it. Ship it.`,
+    `${features.length > 1 ? features[0] + ' meets ' + features[1] : features[0] || 'Your idea'}, built right.`,
+  ];
+  return taglines[Math.floor(Math.random() * taglines.length)];
+}
+
+function generateAIPrompt(input, appName, requirements, techStack, features, stories) {
+  const mustReqs = requirements.filter(r => r.priority === 'must').map(r => `  - ${r.text}`).join('\n');
+  const techNames = techStack.map(t => t.name).join(', ');
+  const storyList = stories.slice(0, 3).map(s => `  - ${s.title}`).join('\n');
+  const featList = features.slice(0, 5).join(', ');
+
+  return `Build me a web application called "${appName}".
+
+ORIGINAL DESCRIPTION:
+${input}
+
+TECH STACK: ${techNames}
+
+CORE FEATURES: ${featList}
+
+REQUIREMENTS (must-have):
+${mustReqs}
+
+KEY USER STORIES:
+${storyList}
+
+STANDARDS TO FOLLOW:
+  - Mobile-first responsive design (375px minimum)
+  - All error, loading, and empty states handled
+  - No exposed API keys in frontend
+  - Accessible: semantic HTML, proper ARIA, keyboard navigation
+  - Input validation on all forms
+  - No console errors in production
+
+DELIVERABLES:
+  - Working, deployable code
+  - README with setup instructions and env vars
+  - Dockerfile or deployment config
+
+Start with the architecture and component breakdown before writing any code.`;
+}
+
+function capitalize(str) {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+/* ============================================
+   RENDER
+   ============================================ */
+function renderSpec(spec) {
+  // Header
+  document.getElementById('spec-timestamp').textContent = spec.timestamp;
+  document.getElementById('spec-app-name').textContent = spec.appName;
+  document.getElementById('spec-tagline').textContent = spec.tagline;
+
+  // Meters
+  document.getElementById('meter-complexity').textContent = spec.complexScore + '/10';
+  document.getElementById('meter-complexity-label').textContent = spec.complexLabel;
+  document.getElementById('meter-features').textContent = spec.featureCount;
+  document.getElementById('meter-features-label').textContent = spec.featureCount <= 3 ? 'Minimal scope' : spec.featureCount <= 6 ? 'Solid scope' : 'Large scope';
+  document.getElementById('meter-time').textContent = spec.buildTime;
+  document.getElementById('meter-time-label').textContent = 'Estimated dev time';
+
+  // Animate meter bars after render
+  setTimeout(() => {
+    const complexPct = (spec.complexScore / 10) * 100;
+    const complexBar = document.getElementById('meter-complexity-bar');
+    complexBar.style.width = complexPct + '%';
+    if (complexPct > 70) complexBar.classList.add('hard');
+    else if (complexPct > 40) complexBar.classList.add('medium');
+
+    document.getElementById('meter-features-bar').style.width = Math.min(100, (spec.featureCount / 10) * 100) + '%';
+    document.getElementById('meter-time-bar').style.width = Math.min(100, (spec.complexScore / 10) * 100) + '%';
+  }, 100);
+
+  // Requirements
+  const reqList = document.getElementById('req-list');
+  reqList.innerHTML = '';
+  spec.requirements.forEach(req => {
+    const li = document.createElement('li');
+    li.className = 'req-item';
+    li.innerHTML = `<span class="req-priority ${req.priority}">${req.priority}</span><span>${req.text}</span>`;
+    reqList.appendChild(li);
+  });
+  document.getElementById('req-count').textContent = spec.requirements.length;
+
+  // Tech stack
+  const techGrid = document.getElementById('tech-grid');
+  techGrid.innerHTML = '';
+  spec.techStack.forEach(tech => {
+    const div = document.createElement('div');
+    div.className = 'tech-item';
+    div.innerHTML = `<span class="tech-name">${tech.name}</span><span class="tech-role">${tech.role}</span>`;
+    techGrid.appendChild(div);
+  });
+  document.getElementById('tech-count').textContent = spec.techStack.length;
+
+  // User stories
+  const storiesList = document.getElementById('stories-list');
+  storiesList.innerHTML = '';
+  spec.stories.forEach(story => {
+    const div = document.createElement('div');
+    div.className = 'story-item';
+    div.innerHTML = `<div class="story-title">${story.title}</div><div class="story-body">${story.body}</div>`;
+    storiesList.appendChild(div);
+  });
+  document.getElementById('stories-count').textContent = spec.stories.length;
+
+  // Risks
+  const risksList = document.getElementById('risks-list');
+  risksList.innerHTML = '';
+  spec.risks.forEach(risk => {
+    const li = document.createElement('li');
+    li.className = 'risk-item';
+    li.innerHTML = `<span class="risk-icon">⚠</span><span>${risk}</span>`;
+    risksList.appendChild(li);
+  });
+  document.getElementById('risks-count').textContent = spec.risks.length;
+
+  // Prompt
+  document.getElementById('prompt-box').textContent = spec.prompt;
+
+  // Store for export
+  window._currentSpec = spec;
+
+  // Show output
+  const out = document.getElementById('output-section');
+  out.classList.add('active');
+  document.getElementById('how-it-works').style.display = 'none';
+
+  // Scroll to output
+  setTimeout(() => {
+    out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+}
+
+/* ============================================
+   UI STATE HELPERS
+   ============================================ */
+function showProcessing() {
+  const proc = document.getElementById('processing');
+  proc.classList.add('active');
+
+  // Reset steps
+  ['step-1','step-2','step-3','step-4','step-5'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.className = 'processing-step';
+      el.querySelector('.step-icon').textContent = '○';
+    }
+  });
+  document.getElementById('progress-bar').style.width = '0%';
+  proc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function hideProcessing() {
+  document.getElementById('processing').classList.remove('active');
+}
+
+function hideOutput() {
+  document.getElementById('output-section').classList.remove('active');
+}
+
+function showError(msg) {
+  const banner = document.getElementById('error-banner');
+  document.getElementById('error-text').textContent = msg;
+  banner.classList.add('show');
+}
+
+function clearError() {
+  document.getElementById('error-banner').classList.remove('show');
+}
+
+/* ============================================
+   ACTIONS
+   ============================================ */
+function clearAll() {
+  document.getElementById('vibe-input').value = '';
+  updateCharCount();
+  hideOutput();
+  hideProcessing();
+  clearError();
+  document.getElementById('how-it-works').style.display = '';
+}
+
+function startOver() {
+  clearAll();
+  document.getElementById('vibe-input').focus();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function copyPrompt() {
+  const text = document.getElementById('prompt-box').textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    showFeedback('prompt-feedback');
+  } catch(e) {
+    fallbackCopy(text);
+    showFeedback('prompt-feedback');
+  }
+}
+
+async function copyFullSpec() {
+  if (!window._currentSpec) return;
+  const spec = window._currentSpec;
+  const text = formatSpecMarkdown(spec);
+  try {
+    await navigator.clipboard.writeText(text);
+    showFeedback('full-copy-feedback');
+  } catch(e) {
+    fallbackCopy(text);
+    showFeedback('full-copy-feedback');
+  }
+}
+
+function downloadSpec() {
+  if (!window._currentSpec) return;
+  const spec = window._currentSpec;
+  const text = formatSpecMarkdown(spec);
+  const blob = new Blob([text], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${spec.appName.toLowerCase()}-spec.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function saveSpec() {
+  if (!window._currentSpec) return;
+  const spec = window._currentSpec;
+  const saves = JSON.parse(localStorage.getItem('vibespec-saves') || '[]');
+  saves.unshift({
+    id: Date.now(),
+    name: spec.appName,
+    tagline: spec.tagline,
+    complexity: spec.complexScore,
+    features: spec.featureCount,
+    timestamp: spec.timestamp,
+    specJson: JSON.stringify(spec)
+  });
+  // Cap at 10 saves
+  localStorage.setItem('vibespec-saves', JSON.stringify(saves.slice(0, 10)));
+  renderSavedList();
+  showFeedback('generate-feedback');
+}
+
+function renderSavedList() {
+  const saves = JSON.parse(localStorage.getItem('vibespec-saves') || '[]');
+  const container = document.getElementById('saved-list');
+  const items = document.getElementById('saved-items');
+
+  if (saves.length === 0) {
+    container.classList.remove('has-items');
+    return;
+  }
+
+  container.classList.add('has-items');
+  items.innerHTML = '';
+  saves.forEach(save => {
+    const div = document.createElement('div');
+    div.className = 'saved-item';
+    div.innerHTML = `
+      <div>
+        <div class="saved-item-name">${save.name}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${save.tagline}</div>
+      </div>
+      <div class="saved-item-meta">
+        <span>${save.complexity}/10 complexity</span>
+        <span>${save.features} features</span>
+        <span>${save.timestamp}</span>
+        <button class="delete-saved" onclick="deleteSave(${save.id}, event)" title="Delete">✕</button>
+      </div>
+    `;
+    div.addEventListener('click', () => {
+      const spec = JSON.parse(save.specJson);
+      renderSpec(spec);
+    });
+    items.appendChild(div);
+  });
+}
+
+function deleteSave(id, e) {
+  e.stopPropagation();
+  const saves = JSON.parse(localStorage.getItem('vibespec-saves') || '[]');
+  localStorage.setItem('vibespec-saves', JSON.stringify(saves.filter(s => s.id !== id)));
+  renderSavedList();
+}
+
+function formatSpecMarkdown(spec) {
+  const mustReqs = spec.requirements.filter(r => r.priority === 'must').map(r => `- [MUST] ${r.text}`).join('\n');
+  const shouldReqs = spec.requirements.filter(r => r.priority === 'should').map(r => `- [SHOULD] ${r.text}`).join('\n');
+  const niceReqs = spec.requirements.filter(r => r.priority === 'nice').map(r => `- [NICE] ${r.text}`).join('\n');
+
+  return `# ${spec.appName} — Build Spec
+> ${spec.tagline}
+Generated: ${spec.timestamp}
+
+## Complexity
+- Score: ${spec.complexScore}/10 (${spec.complexLabel})
+- Features: ${spec.featureCount}
+- Estimated Build Time: ${spec.buildTime}
+
+## Requirements
+${mustReqs}
+${shouldReqs}
+${niceReqs}
+
+## Tech Stack
+${spec.techStack.map(t => `- **${t.name}** — ${t.role}`).join('\n')}
+
+## User Stories
+${spec.stories.map(s => `### ${s.title}\n${s.body.replace(/<[^>]+>/g,'')}`).join('\n\n')}
+
+## Risks & Edge Cases
+${spec.risks.map(r => `- ⚠ ${r}`).join('\n')}
+
+## AI Build Prompt
+\`\`\`
+${spec.prompt}
+\`\`\`
+`;
+}
+
+function showFeedback(id) {
+  const el = document.getElementById(id);
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+
+/* ============================================
+   INIT
+   ============================================ */
+renderSavedList();
+</script>
+</body>
+</html>

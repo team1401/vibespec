@@ -1,0 +1,7 @@
+services:
+  vibespec:
+    build: .
+    container_name: vibespec
+    ports:
+      - "3112:80"
+    restart: unless-stopped
