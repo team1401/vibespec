@@ -2,7 +2,7 @@
 
 > Describe your app idea in casual language. Get a proper technical spec back in under 3 seconds.
 
-**Live URL:** http://100.97.65.28:3112  
+**Live URL:** http://<internal-host>:3112  
 **Port:** 3112  
 **Built:** February 17, 2026  
 **Visual Style:** Neo-Swiss Brutalism
